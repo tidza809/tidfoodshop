@@ -49,6 +49,7 @@ class _AuthenState extends State<Authen> {
     );
   }
 
+
   Widget registerButton() {
     return Container(
       child: Row(
