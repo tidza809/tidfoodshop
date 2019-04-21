@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'regster.dart';
 
 class Authen extends StatefulWidget {
   @override
@@ -49,20 +50,29 @@ class _AuthenState extends State<Authen> {
     );
   }
 
-
-  Widget registerButton() {
+  Widget registerButton(BuildContext context) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Text('No Account:'),
-          RaisedButton( shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          Text(
+            'No Account:',
+            style: TextStyle(color: Colors.pink),
+          ),
+          RaisedButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0)),
             color: Colors.green[800],
             child: Text(
               'Register',
               style: TextStyle(color: Colors.white),
             ),
-            onPressed: () {},
+            onPressed: () {
+              print('You Clink Register');
+              var goToRegisterRoute = MaterialPageRoute(
+                  builder: (BuildContext context) => Register());
+                  Navigator.of(context).push(goToRegisterRoute);
+            },
           )
         ],
       ),
@@ -102,7 +112,7 @@ class _AuthenState extends State<Authen> {
                 )
               ],
             ),
-            registerButton()
+            registerButton(context)
           ],
         ),
       ),
