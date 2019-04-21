@@ -3,6 +3,8 @@ import 'regster.dart';
 import 'package:http/http.dart' show get;
 import 'dart:convert';
 import '../models/user_model.dart';
+import './product.dart';
+
 class Authen extends StatefulWidget {
   @override
   _AuthenState createState() => _AuthenState();
@@ -71,7 +73,7 @@ class _AuthenState extends State<Authen> {
     );
   }
 
-  Widget loginButton() {
+  Widget loginButton(BuildContext context) {
     return RaisedButton(
       shape: new RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(30.0)),
@@ -84,13 +86,13 @@ class _AuthenState extends State<Authen> {
         if (FormKey.currentState.validate()) {
           FormKey.currentState.save();
           print('user = $user , password = $password');
-          checkUserAndPassword();
+          checkUserAndPassword(context);
         }
       },
     );
   }
 
-  void checkUserAndPassword() async {
+  void checkUserAndPassword(BuildContext context) async {
     String urlSting =
         'http://androidthai.in.th/tid/getUserWheretid.php?isAdd=true&User=$user';
     var response = await get(urlSting);
@@ -103,27 +105,28 @@ class _AuthenState extends State<Authen> {
     } else {
       print('User True');
       for (var objJSON in result) {
-         
-         print('objJSON = $objJSON');
-         var userModel = UserModel.fromJSON(objJSON);
+        print('objJSON = $objJSON');
+        var userModel = UserModel.fromJSON(objJSON);
 
-        String truePassword  = userModel.Password.toString();
+        String truePassword = userModel.Password.toString();
         String name = userModel.Name.toString();
-
 
         print('password = $password, truePass = $truePassword');
 
         if (password == truePassword) {
-           showSnackbar('ยินดีต้อนรับ $name');
+          // มันจะหายไปเลย เพื่อไปหน้าใหม่ showSnackbar('ยินดีต้อนรับ $name');
+
+          var productRoute = MaterialPageRoute(
+              builder: (BuildContext context) => Product(
+                    nameLogin: name,
+                  ));
+          //Navigator.of(context).push(productRoute); //Rout  With Arror Back
+          Navigator.of(context).pushAndRemoveUntil(
+              productRoute, (Route<dynamic> Route) => false);
         } else {
           showSnackbar('ผิดนะ ใสให้ถูกต้อง');
-
         }
-
-
       }
-
-
     } // if
   }
 
@@ -133,8 +136,10 @@ class _AuthenState extends State<Authen> {
       duration: Duration(seconds: 6),
       backgroundColor: Colors.green[900],
       content: Text(message),
-      action: SnackBarAction(textColor: Colors.red,
-        label: 'Close',onPressed: (){},
+      action: SnackBarAction(
+        textColor: Colors.red,
+        label: 'Close',
+        onPressed: () {},
       ),
     );
     Scaffoldkey.currentState.showSnackBar(snackBar);
@@ -201,7 +206,7 @@ class _AuthenState extends State<Authen> {
                   children: <Widget>[
                     Container(
                       child: Expanded(
-                        child: loginButton(),
+                        child: loginButton(context),
                       ),
                     )
                   ],
